@@ -8,15 +8,17 @@ try:
 except ImportError:
     from distutils.core import setup
 
-f = open(os.path.join(os.path.dirname(__file__), 'README.md'))
-long_description = f.read()
-f.close()
+from os import path
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='redis_session',
     version=redis_session.__VERSION__,
     description="Simple session implementation for Tornado",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Topic :: Internet :: WWW/HTTP :: Session',
