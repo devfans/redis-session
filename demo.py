@@ -4,35 +4,26 @@
 import tornado.web
 import tornado.httpserver
 import tornado.ioloop
+from tornado.options import options, define, parse_command_line
+from tornado_redis_session import SessionHandler
 
-from .session import SessionHandler
-
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
-            (r'/', MainHandler),
-        ]
-        settings = dict(
-            debug=True,
-        )
-        tornado.web.Application.__init__(self, handlers, **settings)
-
+define('port', default=3000, help='run on the given port', type=int)
+define('debug', default=False, help='run in debug mode')
 
 class MainHandler(SessionHandler):
     def get(self):
-        self.write("Redis Session Example:<br/>")
-        if 'sv' in self.session:
-            sv = self.session["sv"]
-        else:
-            sv = 0
-        self.write('Current Session Value:%s' % sv)
-        self.session['sv'] = sv + 1
-
+        self.write('Redis Session Example\n')
+        count = self.session.count.int
+        self.write(f'Current Session Value:{count}\n')
+        self.session.count = count + 1
+        self.write(f'Current Session Value:{self.session.count.int}\n')
 
 def main():
-    http_server = tornado.httpserver.HTTPServer(Application())
-    http_server.listen(3000)
+    parse_command_line()
+    application = tornado.web.Application([(r'/', MainHandler)], cookie_secret='udxas-efasx-ase323fs-3efsxf3eFdes')
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
