@@ -6,17 +6,17 @@ Web session implementation with redis store
 
 
 ## Description
-Implementated for python3 and tornado(other web framewors to be supported later), using redis hashes to save session data.
+Implementated for python3 and tornado(other web frameworks to be supported later), using redis hashes to save session data.
 
-+ For control expiration of sessions, we are using redis key expiration, and we only control session expiration at server/database side, using default expiration time of secure cookie for session id
++ For controlling expiration of sessions, we are using redis key expiration, and we only control session expiration at server/database side, while using default expiration time of secure cookies for session ids.
 
-+ We are using tornado.options module, so please run below once at starting
++ We are using tornado.options module, so please run below once at start.
 ```
 tornado.options.parse_command_line()
 # or
 tornado.options.parse_config_file("/etc/server.conf")
 ```
-+ Please specify `cookie_secret` for we are using secure cookie key
++ Please specify `cookie_secret` for we are using secure cookie keys.
 
 
 ## Command line parameters
@@ -31,11 +31,15 @@ define('session-cookie-id', help='cookie key, default: session-id', type=str)
 
 ## Setup & Install
 
-```
-# Via pip
-pip install redis_session
+#### Via pip
 
-# From source
+```
+pip install redis_session
+```
+
+#### From source
+
+```
 python setup.py build && python setup.py install
 ```
 
