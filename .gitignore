@@ -1,8 +1,11 @@
+test.py
 *.pid
 *.log
-
+__pycache__
+*/__pycache__
 *.pyc
 */*.pyc
+*/**./pyc
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
