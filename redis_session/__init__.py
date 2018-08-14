@@ -3,7 +3,7 @@
 
 from redis_session.session import SessionHandler
 
-__VERSION__ = '0.0.2'
-version_info = (0, 0, 2)
+__VERSION__ = '0.0.3'
+version_info = (0, 0, 3)
 
 __all__ = ['SessionHandler']
