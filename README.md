@@ -1,6 +1,9 @@
 # redis-session
 Web session implementation with redis store
 
+[![PYPI Version][pypi-image]][pypi-url]
+[![Build Status][travis-image]][travis-url]
+
 
 ## Description
 Implementated for python3 and tornado(other web framewors to be supported later), using redis hashes to save session data.
@@ -68,3 +71,8 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+[pypi-image]: https://img.shields.io/pypi/v/redis-session.svg
+[pypi-url]: https://pypi.org/project/redis-session/
+[travis-image]: https://img.shields.io/travis/devfans/redis-session/master.svg
+[travis-url]: https://travis-ci.org/devfans/redis-session
