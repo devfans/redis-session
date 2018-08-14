@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import tornado_redis_session
+import redis_session
 
 try:
     from setuptools import setup
@@ -11,8 +11,8 @@ except ImportError:
 long_description = """Simple tornado session implementation with redis store"""
 
 setup(
-    name='tornado_redis_session',
-    version=tornado_redis_session.__VERSION__,
+    name='redis_session',
+    version=redis_session.__VERSION__,
     description="Simple session implementation for Tornado",
     long_description=long_description,
     classifiers=[
@@ -23,13 +23,13 @@ setup(
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
     ],
-    keywords='tornado_redis_session tornado web cookie session redis python',
+    keywords='redis_session tornado web cookie session redis python',
     author="Stefan Liu",
     author_email="stefanliu@outlook.com",
-    url="http://github.com/devfans/tornado-session",
+    url="http://github.com/devfans/redis-session",
     license="MIT",
-    packages=["tornado_redis_session"],
+    packages=["redis_session"],
     include_package_data=True,
     zip_safe=True,
-    install_requires=['tornado',],
+    install_requires=['tornado'],
 )

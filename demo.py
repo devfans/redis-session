@@ -5,7 +5,7 @@ import tornado.web
 import tornado.httpserver
 import tornado.ioloop
 from tornado.options import options, define, parse_command_line
-from tornado_redis_session import SessionHandler
+from redis_session import SessionHandler
 
 define('port', default=3000, help='run on the given port', type=int)
 define('debug', default=False, help='run in debug mode')

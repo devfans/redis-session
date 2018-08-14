@@ -3,7 +3,7 @@
 import json
 from tornado.web import RequestHandler
 from tornado.options import options, define
-from tornado_redis_session.model import SessionStore
+from redis_session.model import SessionStore
 
 define('session-redis', default='redis://localhost:6379', help='session store redis url', type=str)
 define('session-redis-prefix', help='redis key prefix', type=str)
