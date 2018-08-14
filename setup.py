@@ -8,13 +8,10 @@ try:
 except ImportError:
     from distutils.core import setup
 
-long_description = """Simple tornado session implementation with redis store"""
-
 setup(
     name='redis_session',
     version=redis_session.__VERSION__,
     description="Simple session implementation for Tornado",
-    long_description=long_description,
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Topic :: Internet :: WWW/HTTP :: Session',

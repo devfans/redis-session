@@ -89,7 +89,7 @@ class SessionStore(metaclass=Singleton):
 
     def __init__(self, kwargs):
         Store.initialize(kwargs.session_redis)
-        prefix = kwargs.session_redis_prefix or 'tornado'
+        prefix = kwargs.session_redis_prefix or 'redis'
         exp = kwargs.session_expire
         tpl = prefix + ':sessions:{sessionId}'
         self._key = RedisHash(tpl=tpl, exp=exp)
