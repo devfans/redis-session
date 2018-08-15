@@ -5,18 +5,17 @@ import tornado.web
 import tornado.httpserver
 import tornado.ioloop
 from tornado.options import options, define, parse_command_line
-from redis_session import SessionHandler
+from redis_session.tornado_session import SessionHandler
 
 define('port', default=3000, help='run on the given port', type=int)
 define('debug', default=False, help='run in debug mode')
 
 class MainHandler(SessionHandler):
     def get(self):
-        self.write('Redis Session Example\n')
         count = self.session.count.int
-        self.write(f'Current Session Value:{count}\n')
+        self.write(f'Current session value of count:{count}\n')
         self.session.count = count + 1
-        self.write(f'Current Session Value:{self.session.count.int}\n')
+        self.write(f'Current session value:{self.session.count.int}\n')
 
 def main():
     parse_command_line()

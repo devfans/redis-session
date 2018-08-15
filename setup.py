@@ -16,7 +16,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name='redis_session',
     version=redis_session.__VERSION__,
-    description="Simple session implementation for Tornado",
+    description="Simple session implementation for python3 web frameworks",
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[
@@ -35,5 +35,5 @@ setup(
     packages=["redis_session"],
     include_package_data=True,
     zip_safe=True,
-    install_requires=['tornado'],
+    install_requires=['redis'],
 )

@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
-from tornado.web import RequestHandler
-from tornado.options import options, define
-from redis_session.model import SessionStore
 
-define('session-redis', default='redis://localhost:6379', help='session store redis url', type=str)
-define('session-redis-prefix', help='redis key prefix', type=str)
-define('session-expire', help='session ttl(seconds)', type=int)
-define('session-cookie-id', help='cookie key, default: session-id', type=str)
+import json
+from uuid import uuid4
+from redis_session.model import SessionStore
 
 class RedisResult(object):
     """Redis result parser"""
@@ -43,10 +38,10 @@ class RedisResult(object):
             return {}
 
 class Session(object):
-    def __init__(self, sessionId):
+    def __init__(self, sessionId, **kwargs):
         super(Session, self).__init__()
         object.__setattr__(self, '_sessionId', sessionId)
-        object.__setattr__(self, '_key', SessionStore(options).key)
+        object.__setattr__(self, '_key', SessionStore(kwargs).key)
         self.touch()
 
     @property
@@ -84,33 +79,5 @@ class Session(object):
         self.touch()
 
 
-class SessionHandler(RequestHandler):
-    """Build basic request handlers with session handling"""
-
-    @property
-    def sessionId(self):
-        if not hasattr(self, '_sessionId'):
-            cookieKey = options.session_cookie_id or 'session-id'
-            sessionId = self.get_secure_cookie(cookieKey)
-            if isinstance(sessionId, bytes):
-                sessionId = sessionId.decode('utf8')
-            if sessionId is None or sessionId == '':
-                sessionId = SessionStore.newSessionId()
-                self.set_secure_cookie(cookieKey, sessionId)
-            self._sessionId = sessionId
-        return self._sessionId
-
-    @property
-    def session(self):
-        if not hasattr(self, '_session'):
-            self._session = Session(self.sessionId)
-        return self._session
-
-    @session.setter
-    def session(self, value):
-        self.session.save(value)
-
-    @session.deleter
-    def session(self):
-        self.session.clear()
-
+def newSessionId():
+    return '{}{}'.format(uuid4(), uuid4())

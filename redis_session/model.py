@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from uuid import uuid4
+
 import redis
+
 
 class Store(object):
     """Initialiaze redis client"""
@@ -48,7 +49,7 @@ class RedisKey(object):
     def delete(self, **kwargs):
         return Store.client.delete(self._key(kwargs))
 
-    def exist(self, **kwargs):
+    def exists(self, **kwargs):
         return Store.client.exists(self._key(kwargs))
 
 
@@ -67,7 +68,7 @@ class RedisHash(RedisKey):
         return Store.client.hsetnx(self._key(kwargs), field, value)
 
     def hexists(self, field, **kwargs):
-        return Store.client.hset(self._key(kwargs), field)
+        return Store.client.hexists(self._key(kwargs), field)
 
     def hkeys(self, **kwargs):
         return Store.client.hkeys(self._key(kwargs))
@@ -87,18 +88,14 @@ class Singleton(type):
 class SessionStore(metaclass=Singleton):
     """ We save sessions as hashsets in redis """
 
-    def __init__(self, kwargs):
-        Store.initialize(kwargs.session_redis)
-        prefix = kwargs.session_redis_prefix or 'redis'
-        exp = kwargs.session_expire
+    def __init__(self, options):
+        Store.initialize(options.get('session_redis') or 'redis://localhost:6379') 
+        prefix = options.get('session_redis_prefix') or 'redis'
+        exp = options.get('session_expire')
         tpl = prefix + ':sessions:{sessionId}'
         self._key = RedisHash(tpl=tpl, exp=exp)
 
     @property
     def key(self):
         return self._key
-
-    @classmethod
-    def newSessionId(self):
-        return '{}{}'.format(uuid4(), uuid4())
 
