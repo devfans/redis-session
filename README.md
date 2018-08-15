@@ -12,10 +12,11 @@ Implementated for python3 web frameworks to handle client sessions(Tornado and F
 
 + Reading session data in a request will cause a session expiration reset per request. Modify session data will cause a reset per modification.
 
-+ Please specify `cookie_secret` for we are using secure cookie keys.
++ Please specify `cookie_secret`(`SECRET_KEY` for flask) for we are using secure cookie keys.
 
 + Getting session attributes is achived by directly fetching from redis to avoid stale data being read. So, when it's not necessary, copy the data instead of reading again, which means:
 ```
+(Example of tornado)
 # Do this
 name = self.session.name.str
 names.append(name)
