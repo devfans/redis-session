@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from redis_session.flask_session import attach_session
+from redis_session.flask_session import setup_session
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -22,10 +22,11 @@ def main():
         SESSION_REDIS='redis://localhost:6379',
         SESSION_REDIS_PREFIX='appName',
         SESSION_COOKIE_ID='app-session-id',
-        SESSION_HTTP_ONLY = True,
+        SESSION_COOKIE_HTTP_ONLY = True,
+        SESSION_COOKIE_SECURE = False,
         SESSION_EXPIRE=60*60*24*7
     )
-    attach_session(app)
+    setup_session(app)
     app.run(port=3000)
 
 if __name__ == "__main__":

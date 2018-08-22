@@ -19,16 +19,17 @@ def setupSession(options):
     sessionOptions['session_redis'] = options.get('SESSION_REDIS')
     sessionOptions['session_redis_prefix'] = options.get('SESSION_REDIS_PREFIX')
     sessionOptions['session_expire'] = options.get('SESSION_EXPIRE')
-    sessionOptions['session_http_only'] = options.get('SESSION_HTTP_ONLY') is not False
+    sessionOptions['session_cookie_http_only'] = options.get('SESSION_COOKIE_HTTP_ONLY') is not False
+    sessionOptions['session_cookie_secure'] = options.get('SESSION_COOKIE_SECURE') is not False
     sessionOptions['session_secret_key'] = options.get('SECRET_KEY')
 
     if sessionOptions['session_secret_key'] is None:
         raise Exception('Please specify secret_key for flask app for security!')
 
-def attach_session(app):
+def setup_session(app):
     global sessionOptions
     setupSession(app.config)
-    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_SECURE'] = sessionOptions['session_cookie_secure']
     digest_method = hashlib.sha1
     key_derivation = "hmac"
 
@@ -59,7 +60,7 @@ def attach_session(app):
 
             @after_this_request
             def post_set_cookie(response):
-                response.set_cookie(sessionOptions['session_cookie_id'], encodeCookie(sessionId))
+                response.set_cookie(sessionOptions['session_cookie_id'], encodeCookie(sessionId), secure=sessionOptions['session_cookie_secure'])
                 return response
 
         request.session = Session(sessionId, **sessionOptions)

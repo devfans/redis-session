@@ -10,7 +10,8 @@ define('session-redis', default='redis://localhost:6379', help='session store re
 define('session-redis-prefix', help='redis key prefix', type=str)
 define('session-expire', help='session ttl(seconds)', type=int)
 define('session-cookie-id', help='cookie key, default: session-id', type=str)
-define('session-http-only', default=True, help='if set session cookie as http only', type=bool)
+define('session-cookie-secure', default=True, help='if use secure session cookie', type=bool)
+define('session-cookie-http-only', default=True, help='if set session cookie as http only', type=bool)
 
 
 class SessionHandler(RequestHandler):
@@ -20,13 +21,16 @@ class SessionHandler(RequestHandler):
     def sessionId(self):
         if not hasattr(self, '_sessionId'):
             cookieKey = options.session_cookie_id or 'session-id'
-            httpOnly = options.session_http_only
-            sessionId = self.get_secure_cookie(cookieKey)
+            httpOnly = options.session_cookie_http_only
+            sessionId = self.get_secure_cookie(cookieKey) if options.session_cookie_secure else self.get_cookie(cookieKey)
             if isinstance(sessionId, bytes):
                 sessionId = sessionId.decode('utf8')
             if sessionId is None or sessionId == '':
                 sessionId = newSessionId()
-                self.set_secure_cookie(cookieKey, sessionId, httponly=httpOnly)
+                if options.session_cookie_secure:
+                    self.set_secure_cookie(cookieKey, sessionId, httponly=httpOnly)
+                else:
+                    self.set_cookie(cookieKey, sessionId, httponly=httpOnly)
             self._sessionId = sessionId
         return self._sessionId
 

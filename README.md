@@ -76,7 +76,8 @@ define('session-redis', default='redis://localhost:6379', help='session store re
 define('session-redis-prefix', help='redis key prefix', type=str)
 define('session-expire', help='session ttl(seconds)', type=int)
 define('session-cookie-id', help='cookie key, default: session-id', type=str)
-define('session-http-only', default=True, help='if set session cookie as http only', type=bool)
+define('session-cookie-secure', default=True, help='if use secure session cookie', type=bool)
+define('session-cookie-http-only', default=True, help='if set session cookie as http only', type=bool)
 ```
 
 ### Example
@@ -113,11 +114,11 @@ if __name__ == '__main__':
 
 ## Flask
 
-Please not `httpOnly` for flask session cookie is not well implementated in this project yet.
+Please note `httpOnly` for flask session cookie is not well implementated in this project yet.
 
 ### Example
 ```
-from redis_session.flask_session import attach_session
+from redis_session.flask_session import setup_session
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -138,10 +139,11 @@ def main():
         SESSION_REDIS='redis://localhost:6379',
         SESSION_REDIS_PREFIX='appName',
         SESSION_COOKIE_ID='app-session-id',
-        SESSION_HTTP_ONLY = True,
+        SESSION_COOKIE_HTTP_ONLY = True,
+        SESSION_COOKIE_SECURE = False,
         SESSION_EXPIRE=60*60*24*7
     )
-    attach_session(app)
+    setup_session(app)
     app.run(port=3000)
 
 if __name__ == "__main__":
