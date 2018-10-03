@@ -77,6 +77,8 @@ define('session-redis-prefix', help='redis key prefix', type=str)
 define('session-expire', help='session ttl(seconds)', type=int)
 define('session-cookie-id', help='cookie key, default: session-id', type=str)
 define('session-cookie-secure', default=True, help='if use secure session cookie', type=bool)
+define('session-cookie-domain', default='', help='session cookie domain', type=str)
+define('session-cookie-path', default='/', help='session cookie path', type=str)
 define('session-cookie-http-only', default=True, help='if set session cookie as http only', type=bool)
 ```
 
@@ -141,6 +143,8 @@ def main():
         SESSION_COOKIE_ID='app-session-id',
         SESSION_COOKIE_HTTP_ONLY = True,
         SESSION_COOKIE_SECURE = False,
+        SESSION_COOKIE_DOMAIN = '.mydomain.com',
+        SESSION_COOKIE_PATH = '/',
         SESSION_EXPIRE=60*60*24*7
     )
     setup_session(app)

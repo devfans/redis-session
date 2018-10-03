@@ -11,6 +11,8 @@ define('session-redis-prefix', help='redis key prefix', type=str)
 define('session-expire', help='session ttl(seconds)', type=int)
 define('session-cookie-id', help='cookie key, default: session-id', type=str)
 define('session-cookie-secure', default=True, help='if use secure session cookie', type=bool)
+define('session-cookie-domain', default='', help='session cookie domain', type=str)
+define('session-cookie-path', default='/', help='session cookie path', type=str)
 define('session-cookie-http-only', default=True, help='if set session cookie as http only', type=bool)
 
 
@@ -27,10 +29,11 @@ class SessionHandler(RequestHandler):
                 sessionId = sessionId.decode('utf8')
             if sessionId is None or sessionId == '':
                 sessionId = newSessionId()
+                domain = options.session_cookie_domain if len(options.session_cookie_domain) > 0 else None
                 if options.session_cookie_secure:
-                    self.set_secure_cookie(cookieKey, sessionId, httponly=httpOnly)
+                    self.set_secure_cookie(cookieKey, sessionId, httponly=httpOnly, domain=domain, path=options.session_cookie_path)
                 else:
-                    self.set_cookie(cookieKey, sessionId, httponly=httpOnly)
+                    self.set_cookie(cookieKey, sessionId, httponly=httpOnly, domain=domain, path=options.session_cookie_path)
             self._sessionId = sessionId
         return self._sessionId
 

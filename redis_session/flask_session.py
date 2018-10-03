@@ -21,6 +21,8 @@ def setupSession(options):
     sessionOptions['session_expire'] = options.get('SESSION_EXPIRE')
     sessionOptions['session_cookie_http_only'] = options.get('SESSION_COOKIE_HTTP_ONLY') is not False
     sessionOptions['session_cookie_secure'] = options.get('SESSION_COOKIE_SECURE') is not False
+    sessionOptions['session_cookie_domain'] = options.get('SESSION_COOKIE_DOMAIN')
+    sessionOptions['session_cookie_path'] = options.get('SESSION_COOKIE_PATH') or '/'
     sessionOptions['session_secret_key'] = options.get('SECRET_KEY')
 
     if sessionOptions['session_secret_key'] is None:
@@ -60,7 +62,8 @@ def setup_session(app):
 
             @after_this_request
             def post_set_cookie(response):
-                response.set_cookie(sessionOptions['session_cookie_id'], encodeCookie(sessionId), secure=sessionOptions['session_cookie_secure'])
+                # TODO: Add http only switch here after some testing
+                response.set_cookie(sessionOptions['session_cookie_id'], encodeCookie(sessionId), secure=sessionOptions['session_cookie_secure'], domain=sessionOptions['session_cookie_domain'], path=sessionOptions['session_cookie_path'])
                 return response
 
         request.session = Session(sessionId, **sessionOptions)
